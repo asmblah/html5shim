@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../vendor/modular/modular.js"></script>
+    </head>
+    <body>
+        <div class="person"></div>
+        <div class="person"></div>
+
+        <div id="house">
+            <div class="person"></div>
+            <div class="person orange"></div>
+        </div>
+
+        <ul id="output"></ul>
+
+        <script type="text/javascript">
+            require([
+                "../html5shim"
+            ], function () {
+                var ul = document.getElementById("output");
+
+                function querySelectorAll(selectors, context) {
+                    return context.querySelectorAll ?
+                        context.querySelectorAll(selectors) :
+                        document.querySelectorAll.call(context, selectors);
+                }
+
+                ul.innerHTML += "<li>There should be 4: " + querySelectorAll(".person", document).length + "</li>";
+                ul.innerHTML += "<li>There should be 2: " + querySelectorAll(".person", document.getElementById("house")).length + "</li>";
+            });
+        </script>
+    </body>
+</html>
