@@ -8,20 +8,22 @@
  */
 
 define([
-    "js/util"
+    "../js/util"
 ], function (
     util
 ) {
     "use strict";
 
-    var global = util.global,
-        document = global.document;
+    return function (html5shim) {
+        var global = util.global,
+            document = global.document;
 
-    util.each([
-        "audio",
-        "canvas",
-        "video"
-    ], function (nodeName) {
-        document.createElement(nodeName);
-    });
+        util.each([
+            "audio",
+            "canvas",
+            "video"
+        ], function (nodeName) {
+            document.createElement(nodeName);
+        });
+    };
 });

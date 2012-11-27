@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../vendor/modular/modular.js"></script>
+    </head>
+    <body>
+        <div class="person"></div>
+        <div class="person"></div>
+
+        <div id="house">
+            <div class="person"></div>
+            <div class="person orange"></div>
+        </div>
+
+        <ul id="output"></ul>
+
+        <script type="text/javascript">
+            require([
+                "../../html5shim"
+            ], function () {
+                var object = Object.create(null, {}),
+                    ul = document.getElementById("output");
+
+                Object.defineProperty(object, "test", {
+                    get: function () {
+                        return 7;
+                    }
+                });
+
+                ul.innerHTML += "<li>Getter should return 7: " + object.test + "</li>";
+            });
+        </script>
+    </body>
+</html>

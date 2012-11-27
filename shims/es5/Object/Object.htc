@@ -1,0 +1,15 @@
+<public:component>
+    <script type="text/javascript">
+        element.__transport__ = {
+            define: function (name, value) {
+                eval(name + " = value");
+            },
+            document: document,
+            descriptors: {},
+            elements: {},
+            inheriteds: {},
+            nextID: 0,
+            prototype: null
+        };
+    </script>
+</public:component>

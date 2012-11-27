@@ -8,15 +8,15 @@
  */
 
 define([
-    "js/util"
+    "./util"
 ], function (
     util
 ) {
     "use strict";
 
-    function ShimQueue(require) {
+    function ShimQueue(html5shim) {
+        this.html5shim = html5shim;
         this.queue = [];
-        this.require = require;
     }
 
     util.extend(ShimQueue.prototype, {
@@ -26,6 +26,7 @@ define([
 
         dequeue: function (whenDone) {
             var shimQueue = this,
+                html5shim = this.html5shim,
                 task = shimQueue.queue[0];
 
             if (!task) {
@@ -36,9 +37,12 @@ define([
             }
 
             if (task.requirementTest()) {
-                this.require([
-                    "../shims/" + task.name
-                ], function () {
+                html5shim.require([
+                    "./shims/" + task.name
+                ], function (
+                    shim
+                ) {
+                    shim(html5shim);
                     shimQueue.queue.shift();
                     shimQueue.dequeue(whenDone);
                 });

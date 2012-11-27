@@ -71,8 +71,8 @@
         if (loadSync) {
             if (!xhr) {
                 xhr = global.XMLHttpRequest ?
-                    new global.XMLHttpRequest() :
-                    new global.ActiveXObject("Microsoft.XMLHTTP");
+                        new global.XMLHttpRequest() :
+                        new global.ActiveXObject("Microsoft.XMLHTTP");
             }
 
             // Make a synchronous request, as we need to block until complete (in this mode)
@@ -83,6 +83,7 @@
             whenDone();
         } else {
             script = document.createElement("script");
+            script.src = baseURI + path + ".js";
             script.onreadystatechange = function () {
                 if (/loaded|complete/.test(this.readyState)) {
                     whenDone();
@@ -134,24 +135,18 @@
         return;
     }
 
-    loadScript("vendor/modular/modular", function () {
-        if (!global.require) {
-            global.console.log("HTML5Shim html5shims.js :: Modular failed to load");
-            whenDone();
-            return;
-        }
-
+    function init() {
         global.require([
             "modular"
         ], function (
             modular
         ) {
-            var util = modular.util;
+            var util = modular.util,
+                defaultConfig = util.extend({}, global.require.config());
 
             if (loadSync) {
                 (function () {
-                    var defaultConfig = global.require.config(),
-                        nextCallback;
+                    var nextCallback;
 
                     global.require.config({
                         "defineAnonymous": function (args) {
@@ -163,15 +158,39 @@
                         }
                     });
                 }());
-            } else {
-                global.require.config({
-                    "baseUrl": baseURI
-                });
             }
 
-            global.require([
-                "js/main"
-            ], whenDone);
+            global.require({
+                baseUrl: baseURI
+            }, [
+                "require",
+                "./js/HTML5Shim"
+            ], function (
+                require,
+                HTML5Shim
+            ) {
+                var html5shim = new HTML5Shim(require, baseURI);
+                html5shim.loadShims(function () {
+                    if (loadSync) {
+                        global.require.config(defaultConfig);
+                    }
+                    whenDone();
+                });
+            });
         });
-    });
+    }
+
+    if (!global.require) {
+        loadScript("vendor/modular/modular", function () {
+            if (!global.require) {
+                global.console.log("HTML5Shim html5shims.js :: Modular failed to load");
+                whenDone();
+                return;
+            }
+
+            init();
+        });
+    } else {
+        init();
+    }
 }());

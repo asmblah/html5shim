@@ -14,7 +14,39 @@ define([
 ) {
     "use strict";
 
-    // Silence is golden.
+    var support = {
+            defineProperty: (function () {
+                var object = {};
 
-    return modular.util;
+                if (!Object.defineProperty) {
+                    return false;
+                }
+
+                try {
+                    Object.defineProperty(object, "test", {
+                        get: function () {
+                            return 7;
+                        }
+                    });
+
+                    return object.test === 7;
+                } catch (error) {
+                    return false;
+                }
+            }())
+        },
+        util = modular.util.extend({}, modular.util, {
+            defineProperty: (support.defineProperty ?
+                    function (object, name, value) {
+                        Object.defineProperty(object, name, {
+                            get: value
+                        });
+                    } :
+                    function (object, name, value) {
+                        object[name] = value;
+                    }),
+            support: support
+        });
+
+    return util;
 });

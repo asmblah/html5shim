@@ -18,5 +18,9 @@ define({
     // https://developer.mozilla.org/en-US/docs/DOM/Document.getElementsByClassName
     "getElementsByClassName": function () { return !document.getElementsByClassName; },
 
-    "html5Elements": function () { return !document.createElement("canvas").getContext; }
+    "html5Elements": function () { return !document.createElement("canvas").getContext; },
+
+    "es5/Array": function () { return !Array.isArray; },
+
+    "es5/Object": function () { return !Object.create || !Object.defineProperty || !Object.getOwnPropertyNames; }
 });

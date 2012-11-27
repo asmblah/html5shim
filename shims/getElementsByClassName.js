@@ -8,27 +8,29 @@
  */
 
 define([
-    "js/util"
+    "../js/util"
 ], function (
     util
 ) {
     "use strict";
 
-    var global = util.global,
-        document = global.document,
-        getElementsByClassName = function (className) {
-            return document.querySelector.call(this, "." + className);
-        };
+    return function (html5shim) {
+        var global = util.global,
+            document = global.document,
+            getElementsByClassName = function (className) {
+                return document.querySelector.call(this, "." + className);
+            };
 
-    // https://developer.mozilla.org/en-US/docs/DOM/Element.getElementsByClassName
-    if (global.Element && global.Element.prototype) {
-        if (!global.Element.prototype.getElementsByClassName) {
-            global.Element.prototype.getElementsByClassName = getElementsByClassName;
+        // https://developer.mozilla.org/en-US/docs/DOM/Element.getElementsByClassName
+        if (global.Element && global.Element.prototype) {
+            if (!global.Element.prototype.getElementsByClassName) {
+                util.defineProperty(global.Element.prototype, "getElementsByClassName", getElementsByClassName);
+            }
         }
-    }
 
-    // https://developer.mozilla.org/en-US/docs/DOM/Document.getElementsByClassName
-    if (!document.getElementsByClassName) {
-        document.getElementsByClassName = getElementsByClassName;
-    }
+        // https://developer.mozilla.org/en-US/docs/DOM/Document.getElementsByClassName
+        if (!document.getElementsByClassName) {
+            util.defineProperty(document, "getElementsByClassName", getElementsByClassName);
+        }
+    };
 });
