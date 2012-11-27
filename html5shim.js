@@ -111,6 +111,7 @@
 
     // IE version < v6 not supported
     if (!version || version < 6) {
+        whenDone();
         return;
     }
 
@@ -129,12 +130,14 @@
 
     if (baseURI === null) {
         global.console.log("HTML5Shim html5shims.js :: Could not find html5shims.js script to determine base URI");
+        whenDone();
         return;
     }
 
     loadScript("vendor/modular/modular", function () {
         if (!global.require) {
             global.console.log("HTML5Shim html5shims.js :: Modular failed to load");
+            whenDone();
             return;
         }
 
