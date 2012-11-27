@@ -70,7 +70,9 @@
 
         if (loadSync) {
             if (!xhr) {
-                xhr = new global.XMLHttpRequest();
+                xhr = global.XMLHttpRequest ?
+                    new global.XMLHttpRequest() :
+                    new global.ActiveXObject("Microsoft.XMLHTTP");
             }
 
             // Make a synchronous request, as we need to block until complete (in this mode)
