@@ -7,7 +7,6 @@
  * http://html5shim.com/license
  */
 
-debugger;
 define([
     "./util",
     "./ShimQueue"
